@@ -1,0 +1,373 @@
+:root {
+  --background-light: #ffffff;
+  --background-dark: #1e222d;
+  --text-light: #333333;
+  --text-dark: #ffffff;
+  --border-light: #ddd;
+  --border-dark: #3a3f4b;
+  --primary-color: #2962FF;
+  --hover-light: #f0f0f0;
+  --hover-dark: #3a3f4b;
+  --card-bg-light: #ffffff;
+  --card-bg-dark: #2a2e39;
+  --input-bg-light: #ffffff;
+  --input-bg-dark: #2a2e39;
+}
+
+/* Base styles */
+html {
+  background-color: var(--background-light);
+  transition: background-color 0.3s;
+}
+
+html.dark-mode {
+  background-color: var(--background-dark);
+}
+
+body {
+  background-color: var(--background-light);
+  color: var(--text-light);
+  transition: background-color 0.3s, color 0.3s;
+  min-height: 100vh;
+  margin: 0;
+}
+
+body.dark-mode {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+/* Root element */
+#root {
+  min-height: 100vh;
+  background-color: var(--background-light);
+  transition: background-color 0.3s;
+}
+
+.dark-mode #root {
+  background-color: var(--background-dark);
+}
+
+/* App container */
+.App {
+  min-height: 100vh;
+  background-color: var(--background-light);
+  transition: background-color 0.3s;
+}
+
+.dark-mode .App {
+  background-color: var(--background-dark);
+}
+
+/* Main content area */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: var(--background-light);
+  transition: background-color 0.3s;
+}
+
+.dark-mode .main-content {
+  background-color: var(--background-dark);
+}
+
+/* Stock Search */
+.stock-search {
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  background-color: var(--input-bg-light);
+  color: var(--text-light);
+  transition: all 0.3s ease;
+}
+
+.dark-mode .search-input {
+  background-color: var(--input-bg-dark);
+  color: var(--text-dark);
+  border-color: var(--border-dark);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* News Feed */
+.news-feed {
+  margin-top: 2rem;
+}
+
+.news-feed h2 {
+  color: var(--text-light);
+  margin-bottom: 1rem;
+}
+
+.dark-mode .news-feed h2 {
+  color: var(--text-dark);
+}
+
+.news-card {
+  background-color: var(--card-bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .news-card {
+  background-color: var(--card-bg-dark);
+  border-color: var(--border-dark);
+}
+
+.news-card h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-light);
+}
+
+.dark-mode .news-card h3 {
+  color: var(--text-dark);
+}
+
+.news-date {
+  color: var(--text-light);
+  opacity: 0.7;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.dark-mode .news-date {
+  color: var(--text-dark);
+}
+
+.news-card a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.news-card a:hover {
+  text-decoration: underline;
+}
+
+/* Sentiment Display */
+.sentiment-display {
+  background-color: var(--card-bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .sentiment-display {
+  background-color: var(--card-bg-dark);
+  border-color: var(--border-dark);
+}
+
+.sentiment-display h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-light);
+}
+
+.dark-mode .sentiment-display h3 {
+  color: var(--text-dark);
+}
+
+.sentiment-indicator {
+  padding: 1rem;
+  border-radius: 4px;
+  color: white;
+}
+
+.sentiment-label {
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+/* Stock Info */
+.stock-info {
+  background-color: var(--card-bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .stock-info {
+  background-color: var(--card-bg-dark);
+  border-color: var(--border-dark);
+}
+
+.stock-info h2 {
+  margin: 0;
+  color: var(--text-light);
+}
+
+.dark-mode .stock-info h2 {
+  color: var(--text-dark);
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  color: var(--text-light);
+}
+
+.dark-mode .price {
+  color: var(--text-dark);
+}
+
+.price-change {
+  font-weight: bold;
+}
+
+.price-change.positive {
+  color: #4caf50;
+}
+
+.price-change.negative {
+  color: #f44336;
+}
+
+/* Loading and Error states */
+.loading, .error-message {
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--card-bg-light);
+  border-radius: 8px;
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .loading, .dark-mode .error-message {
+  background-color: var(--card-bg-dark);
+}
+
+.loading {
+  color: var(--text-light);
+}
+
+.dark-mode .loading {
+  color: var(--text-dark);
+}
+
+.error-message {
+  color: #dc3545;
+}
+
+.dark-mode .error-message {
+  color: #ff6b6b;
+}
+
+/* Common components dark mode styles */
+.card {
+  background-color: var(--background-light);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.dark-mode .card {
+  background-color: #2a2e39;
+  border-color: var(--border-dark);
+}
+
+button {
+  background-color: var(--background-light);
+  color: var(--text-light);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.dark-mode button {
+  background-color: #2a2e39;
+  color: var(--text-dark);
+  border-color: var(--border-dark);
+}
+
+button:hover {
+  background-color: var(--hover-light);
+}
+
+.dark-mode button:hover {
+  background-color: var(--hover-dark);
+}
+
+/* Add more global dark mode styles as needed */
+
+.theme-toggle {
+  position: relative;
+  top: auto;
+  right: auto;
+  padding: 10px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1000;
+  border: none;
+  background: var(--background-light);
+  color: var(--text-light);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.dark-mode .theme-toggle {
+  background: var(--background-dark);
+  color: var(--text-dark);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* Add to your existing global.css */
+.app-header {
+  padding: 1rem 2rem;
+  background-color: var(--background-light);
+  border-bottom: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.dark-mode .app-header {
+  background-color: var(--background-dark);
+  border-bottom-color: var(--border-dark);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-light);
+}
+
+.dark-mode .header-title h1 {
+  color: var(--text-dark);
+}
+
+.header-title p {
+  margin: 0.5rem 0 0;
+  color: var(--text-light);
+  opacity: 0.8;
+}
+
+.dark-mode .header-title p {
+  color: var(--text-dark);
+}

@@ -1,0 +1,80 @@
+.stock-analysis {
+  background-color: #ffffff;
+  color: #333333;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.stock-analysis.dark-mode {
+  background-color: #1e222d;
+  color: #ffffff;
+}
+
+.timeframe-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.timeframe-selector button {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .timeframe-selector button {
+  background: #2a2e39;
+  border-color: #3a3f4b;
+  color: #ffffff;
+}
+
+.timeframe-selector button:hover {
+  background: #f0f0f0;
+}
+
+.dark-mode .timeframe-selector button:hover {
+  background: #3a3f4b;
+}
+
+.timeframe-selector button.active {
+  background: #2962FF;
+  color: white;
+  border-color: #2962FF;
+}
+
+.dark-mode .timeframe-selector button.active {
+  background: #2962FF;
+  color: white;
+  border-color: #2962FF;
+}
+
+.tradingview-widget-container {
+  height: 500px;
+  width: 100%;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.loading {
+  color: #666;
+  text-align: center;
+  padding: 20px;
+}
+
+.dark-mode .loading {
+  color: #999;
+}
+
+.error-message {
+  color: #dc3545;
+  text-align: center;
+  padding: 20px;
+}
+
+.dark-mode .error-message {
+  color: #ff6b6b;
+}
