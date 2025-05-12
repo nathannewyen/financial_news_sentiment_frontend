@@ -371,3 +371,69 @@ button:hover {
 .dark-mode .header-title p {
   color: var(--text-dark);
 }
+
+/* Add to your existing CSS */
+.sentiment-trends {
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: var(--card-bg-light);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dark-mode .sentiment-trends {
+  background-color: var(--card-bg-dark);
+}
+
+.trends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.trend-card {
+  padding: 1rem;
+  background-color: var(--background-light);
+  border-radius: 4px;
+  border: 1px solid var(--border-light);
+}
+
+.dark-mode .trend-card {
+  background-color: var(--background-dark);
+  border-color: var(--border-dark);
+}
+
+.distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.distribution-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pattern-chart {
+  display: flex;
+  align-items: flex-end;
+  height: 200px;
+  gap: 2px;
+}
+
+.pattern-bar {
+  flex: 1;
+  min-width: 20px;
+  position: relative;
+  transition: height 0.3s ease;
+}
+
+.pattern-bar .hour {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+}

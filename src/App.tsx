@@ -3,11 +3,12 @@ import Header from './components/Header';
 import StockSearch from './components/StockSearch';
 import NewsFeed from './components/NewsFeed';
 import SentimentDisplay from './components/SentimentDisplay';
-import { api, NewsArticle, StockInfo } from './services/api';
+import { api, NewsArticle, StockInfo, SentimentTrends as SentimentTrendsType } from './services/api';
 import './App.css';
 import StockAnalysis from './components/StockAnalysis';
 import { ThemeProvider } from './contexts/ThemeContext';
 import './styles/global.css';
+import SentimentTrends from './components/SentimentTrends';
 
 function App() {
   const [selectedTicker, setSelectedTicker] = useState<string>('');
@@ -19,6 +20,7 @@ function App() {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sentimentTrends, setSentimentTrends] = useState<SentimentTrendsType | null>(null);
 
   const handleStockSearch = async (ticker: string) => {
     setSelectedTicker(ticker);
@@ -33,6 +35,10 @@ function App() {
       // Fetch news
       const newsData = await api.getNews(ticker);
       setNews(newsData);
+      
+      // Fetch sentiment trends
+      const trendsData = await api.getSentimentTrends(ticker);
+      setSentimentTrends(trendsData);
       
       // If we have news, use the first article's sentiment as current sentiment
       if (newsData.length > 0) {
@@ -74,6 +80,9 @@ function App() {
           {selectedTicker && (
             <>
               {currentSentiment && <SentimentDisplay sentiment={currentSentiment} />}
+              {selectedTicker && sentimentTrends && (
+                <SentimentTrends trends={sentimentTrends} />
+              )}
               <NewsFeed news={news} />
             </>
           )}
