@@ -1,0 +1,123 @@
+.sidebar {
+  background: #181c24;
+  color: #fff;
+  width: 260px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0 0 0;
+  overflow-y: auto;
+  z-index: 10;
+  position: sticky;
+  top: 72px;
+}
+
+.sidebar-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0 24px 12px 24px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-count {
+  color: #7b8190;
+  font-size: 0.9rem;
+}
+
+.watchlist {
+  list-style: none;
+  margin: 0 0 24px 0;
+  padding: 0;
+}
+
+.watchlist-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 24px;
+  font-size: 1rem;
+  border-left: 4px solid transparent;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.watchlist-item.active, .watchlist-item:hover {
+  background: #23283a;
+  border-left: 4px solid #3b82f6;
+}
+
+.icon {
+  background: #23283a;
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.price {
+  margin-left: auto;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.price.up {
+  color: #22c55e;
+}
+.price.down {
+  color: #ef4444;
+}
+
+.sidebar-nav {
+  margin-top: auto;
+  padding: 24px 0 0 0;
+  border-top: 1px solid #23283a;
+}
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0 24px;
+  margin: 0;
+}
+.sidebar-nav li {
+  padding: 12px 0;
+  font-size: 1.05rem;
+  color: #b0b6c3;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.sidebar-nav li:hover {
+  color: #fff;
+}
+
+.sidebar-auth-divider {
+  border-top: 1px solid #23283a;
+  margin: 24px 0 0 0;
+}
+
+.sidebar-auth-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px 24px 24px 24px;
+}
+
+.sidebar-auth-btn {
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.sidebar-auth-btn:hover {
+  background: #4f46e5;
+} 

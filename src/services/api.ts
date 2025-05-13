@@ -42,6 +42,19 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+export interface WatchlistItem {
+  symbol: string;
+  name: string;
+  price: number;
+  change: number;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+}
+
 export const api = {
   async analyzeHeadline(headline: string): Promise<SentimentResult> {
     const response = await fetch(`${API_BASE_URL}/analyze-headline`, {
@@ -89,6 +102,43 @@ export const api = {
     }
     
     const result: ApiResponse<SentimentTrends> = await response.json();
+    return result.data;
+  },
+
+  async getWatchlist(): Promise<WatchlistItem[]> {
+    const response = await fetch(`${API_BASE_URL}/watchlist`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch watchlist');
+    }
+    const result = await response.json();
+    return result.data;
+  },
+
+  async loginUser({ username, password }: { username: string; password: string }): Promise<User> {
+    const response = await fetch(`${API_BASE_URL}/users/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Login failed');
+    }
+    const result = await response.json();
+    return result.data;
+  },
+
+  async registerUser({ username, email, password }: { username: string; email: string; password: string }): Promise<User> {
+    const response = await fetch(`${API_BASE_URL}/users/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password })
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Registration failed');
+    }
+    const result = await response.json();
     return result.data;
   }
 };

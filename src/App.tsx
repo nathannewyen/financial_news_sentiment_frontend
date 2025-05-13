@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import StockSearch from './components/StockSearch';
 import NewsFeed from './components/NewsFeed';
 import SentimentDisplay from './components/SentimentDisplay';
-import { api, NewsArticle, StockInfo, SentimentTrends as SentimentTrendsType } from './services/api';
+import { api, NewsArticle, StockInfo, SentimentTrends as SentimentTrendsType, WatchlistItem } from './services/api';
 import './App.css';
 import StockAnalysis from './components/StockAnalysis';
 import { ThemeProvider } from './contexts/ThemeContext';
 import './styles/global.css';
 import SentimentTrends from './components/SentimentTrends';
+import Sidebar from './components/Sidebar';
+import AuthForm from './components/AuthForm';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
-function App() {
+function MainApp() {
   const [selectedTicker, setSelectedTicker] = useState<string>('');
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [stockInfo, setStockInfo] = useState<StockInfo | null>(null);
@@ -21,6 +24,15 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sentimentTrends, setSentimentTrends] = useState<SentimentTrendsType | null>(null);
+  const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch watchlist on mount
+    api.getWatchlist()
+      .then(setWatchlist)
+      .catch(() => setWatchlist([]));
+  }, []);
 
   const handleStockSearch = async (ticker: string) => {
     setSelectedTicker(ticker);
@@ -52,44 +64,75 @@ function App() {
     }
   };
 
-  return (
-    <ThemeProvider>
-      <div className="App">
-        <Header />
-        <main className="main-content">
-          <StockSearch onSearch={handleStockSearch} />
-          
-          {error && <div className="error-message">{error}</div>}
-          
-          {loading && <div className="loading">Loading...</div>}
-          
-          {selectedTicker && stockInfo && (
-            <div className="stock-info">
-              <h2>{selectedTicker}</h2>
-              <p className="price">${stockInfo.price.toFixed(2)}</p>
-              <p className={`price-change ${stockInfo.priceChange >= 0 ? 'positive' : 'negative'}`}>
-                {stockInfo.priceChange >= 0 ? '+' : ''}{stockInfo.priceChange.toFixed(2)}%
-              </p>
-            </div>
-          )}
+  const handleSidebarSelect = (symbol: string) => {
+    setSelectedTicker(symbol);
+    handleStockSearch(symbol);
+  };
 
-          {selectedTicker && (
-            <StockAnalysis ticker={selectedTicker} />
-          )}
-          
-          {selectedTicker && (
-            <>
-              {currentSentiment && <SentimentDisplay sentiment={currentSentiment} />}
-              {selectedTicker && sentimentTrends && (
-                <SentimentTrends trends={sentimentTrends} />
-              )}
-              <NewsFeed news={news} />
-            </>
-          )}
-        </main>
-      </div>
-    </ThemeProvider>
+  const handleLogin = () => navigate('/login');
+  const handleRegister = () => navigate('/register');
+
+  return (
+    <div className="App" style={{ display: 'flex' }}>
+      <Sidebar
+        watchlist={watchlist}
+        selectedSymbol={selectedTicker}
+        onSelect={handleSidebarSelect}
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+      />
+      <main className="main-content" style={{ flex: 1 }}>
+        <Header />
+        <Routes>
+          <Route
+            path="/login"
+            element={<AuthForm mode="login" onSubmit={() => {}} />} // TODO: connect to backend
+          />
+          <Route
+            path="/register"
+            element={<AuthForm mode="register" onSubmit={() => {}} />} // TODO: connect to backend
+          />
+          <Route
+            path="/"
+            element={
+              <>
+                <StockSearch onSearch={handleStockSearch} />
+                {error && <div className="error-message">{error}</div>}
+                {loading && <div className="loading">Loading...</div>}
+                {selectedTicker && stockInfo && (
+                  <div className="stock-info">
+                    <h2>{selectedTicker}</h2>
+                    <p className="price">${stockInfo.price.toFixed(2)}</p>
+                    <p className={`price-change ${stockInfo.priceChange >= 0 ? 'positive' : 'negative'}`}>
+                      {stockInfo.priceChange >= 0 ? '+' : ''}{stockInfo.priceChange.toFixed(2)}%
+                    </p>
+                  </div>
+                )}
+                {selectedTicker && <StockAnalysis ticker={selectedTicker} />}
+                {selectedTicker && (
+                  <>
+                    {currentSentiment && <SentimentDisplay sentiment={currentSentiment} />}
+                    {selectedTicker && sentimentTrends && (
+                      <SentimentTrends trends={sentimentTrends} />
+                    )}
+                    <NewsFeed news={news} />
+                  </>
+                )}
+              </>
+            }
+          />
+        </Routes>
+      </main>
+    </div>
   );
 }
+
+const App = () => (
+  <ThemeProvider>
+    <Router>
+      <MainApp />
+    </Router>
+  </ThemeProvider>
+);
 
 export default App;
