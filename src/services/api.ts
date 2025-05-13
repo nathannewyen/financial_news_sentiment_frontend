@@ -105,8 +105,8 @@ export const api = {
     return result.data;
   },
 
-  async getWatchlist(): Promise<WatchlistItem[]> {
-    const response = await fetch(`${API_BASE_URL}/watchlist`);
+  async getWatchlist(userId: number): Promise<WatchlistItem[]> {
+    const response = await fetch(`${API_BASE_URL}/watchlist?user_id=${userId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch watchlist');
     }
@@ -114,11 +114,33 @@ export const api = {
     return result.data;
   },
 
-  async loginUser({ username, password }: { username: string; password: string }): Promise<User> {
+  async addToWatchlist(symbol: string, name: string, userId: number): Promise<WatchlistItem> {
+    const response = await fetch(`${API_BASE_URL}/watchlist`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        symbol,
+        name,
+        user_id: userId
+      }),
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to add to watchlist');
+    }
+    
+    const result = await response.json();
+    return result.data;
+  },
+
+  async loginUser({ email, password }: { email: string; password: string }): Promise<User> {
     const response = await fetch(`${API_BASE_URL}/users/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ email, password })
     });
     if (!response.ok) {
       const error = await response.json();

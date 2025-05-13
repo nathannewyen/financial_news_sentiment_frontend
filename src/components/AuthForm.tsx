@@ -3,7 +3,7 @@ import '../styles/AuthForm.css';
 
 interface AuthFormProps {
   mode: 'login' | 'register';
-  onSubmit: (data: { username?: string; email: string; password: string }) => void;
+  onSubmit: (data: { email: string; password: string } | { username: string; email: string; password: string }) => void;
   loading?: boolean;
   error?: string | null;
 }

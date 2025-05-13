@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/Sidebar.css';
+import { User } from '../services/api';
 
 export interface WatchlistItem {
   symbol: string;
@@ -14,9 +15,11 @@ interface SidebarProps {
   onSelect?: (symbol: string) => void;
   onLogin?: () => void;
   onRegister?: () => void;
+  onLogout?: () => void;
+  user: User | null;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ watchlist, selectedSymbol, onSelect, onLogin, onRegister }) => {
+const Sidebar: React.FC<SidebarProps> = ({ watchlist, selectedSymbol, onSelect, onLogin, onRegister, onLogout, user }) => {
   return (
     <aside className="sidebar">
       <div className="sidebar-title">Watchlist 1 <span className="sidebar-count">{watchlist.length}/50</span></div>
@@ -43,8 +46,14 @@ const Sidebar: React.FC<SidebarProps> = ({ watchlist, selectedSymbol, onSelect, 
       </nav>
       <div className="sidebar-auth-divider" />
       <div className="sidebar-auth-links">
-        <button className="sidebar-auth-btn" onClick={onLogin}>Login</button>
-        <button className="sidebar-auth-btn" onClick={onRegister}>Register</button>
+        {user ? (
+          <button className="sidebar-auth-btn" onClick={onLogout}>Logout</button>
+        ) : (
+          <>
+            <button className="sidebar-auth-btn" onClick={onLogin}>Login</button>
+            <button className="sidebar-auth-btn" onClick={onRegister}>Register</button>
+          </>
+        )}
       </div>
     </aside>
   );

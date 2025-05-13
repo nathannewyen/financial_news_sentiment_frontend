@@ -204,13 +204,52 @@ body.dark-mode {
   border-color: var(--border-dark);
 }
 
-.stock-info h2 {
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stock-header h2 {
   margin: 0;
   color: var(--text-light);
 }
 
-.dark-mode .stock-info h2 {
+.dark-mode .stock-header h2 {
   color: var(--text-dark);
+}
+
+.add-to-watchlist-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  background-color: var(--card-bg-light);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.dark-mode .add-to-watchlist-btn {
+  background-color: var(--card-bg-dark);
+  color: var(--text-dark);
+  border-color: var(--border-dark);
+}
+
+.add-to-watchlist-btn:hover {
+  background-color: var(--hover-light);
+  border-color: var(--primary-color);
+}
+
+.dark-mode .add-to-watchlist-btn:hover {
+  background-color: var(--hover-dark);
+  border-color: var(--primary-color);
+}
+
+.add-to-watchlist-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .price {

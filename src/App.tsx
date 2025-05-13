@@ -3,7 +3,7 @@ import Header from './components/Header';
 import StockSearch from './components/StockSearch';
 import NewsFeed from './components/NewsFeed';
 import SentimentDisplay from './components/SentimentDisplay';
-import { api, NewsArticle, StockInfo, SentimentTrends as SentimentTrendsType, WatchlistItem } from './services/api';
+import { api, NewsArticle, StockInfo, SentimentTrends as SentimentTrendsType, WatchlistItem, User } from './services/api';
 import './App.css';
 import StockAnalysis from './components/StockAnalysis';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -25,13 +25,20 @@ function MainApp() {
   const [error, setError] = useState<string | null>(null);
   const [sentimentTrends, setSentimentTrends] = useState<SentimentTrendsType | null>(null);
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch watchlist on mount
-    api.getWatchlist()
-      .then(setWatchlist)
-      .catch(() => setWatchlist([]));
+    // Check if user is logged in
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setUser(user);
+      // Fetch watchlist for the logged-in user
+      api.getWatchlist(user.id)
+        .then(setWatchlist)
+        .catch(() => setWatchlist([]));
+    }
   }, []);
 
   const handleStockSearch = async (ticker: string) => {
@@ -72,6 +79,58 @@ function MainApp() {
   const handleLogin = () => navigate('/login');
   const handleRegister = () => navigate('/register');
 
+  const handleLoginSubmit = async (data: { email: string; password: string }) => {
+    try {
+      const user = await api.loginUser(data);
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser(user);
+      navigate('/');
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Login failed');
+    }
+  };
+
+  const handleRegisterSubmit = async (data: { email: string; password: string } | { username: string; email: string; password: string }) => {
+    if ('username' in data) {
+      try {
+        const user = await api.registerUser(data);
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+        navigate('/');
+      } catch (error) {
+        alert(error instanceof Error ? error.message : 'Registration failed');
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/login');
+  };
+
+  const handleAddToWatchlist = async () => {
+    if (!user) {
+      alert('Please login to add stocks to your watchlist');
+      return;
+    }
+    if (!selectedTicker || !stockInfo) {
+      return;
+    }
+
+    try {
+      const newItem = await api.addToWatchlist(
+        selectedTicker,
+        selectedTicker, // Using ticker as name for now
+        user.id
+      );
+      setWatchlist([...watchlist, newItem]);
+      alert('Added to watchlist successfully!');
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Failed to add to watchlist');
+    }
+  };
+
   return (
     <div className="App" style={{ display: 'flex' }}>
       <Sidebar
@@ -80,17 +139,19 @@ function MainApp() {
         onSelect={handleSidebarSelect}
         onLogin={handleLogin}
         onRegister={handleRegister}
+        onLogout={handleLogout}
+        user={user}
       />
       <main className="main-content" style={{ flex: 1 }}>
         <Header />
         <Routes>
           <Route
             path="/login"
-            element={<AuthForm mode="login" onSubmit={() => {}} />} // TODO: connect to backend
+            element={<AuthForm mode="login" onSubmit={handleLoginSubmit} />}
           />
           <Route
             path="/register"
-            element={<AuthForm mode="register" onSubmit={() => {}} />} // TODO: connect to backend
+            element={<AuthForm mode="register" onSubmit={handleRegisterSubmit} />}
           />
           <Route
             path="/"
@@ -101,7 +162,16 @@ function MainApp() {
                 {loading && <div className="loading">Loading...</div>}
                 {selectedTicker && stockInfo && (
                   <div className="stock-info">
-                    <h2>{selectedTicker}</h2>
+                    <div className="stock-header">
+                      <h2>{selectedTicker}</h2>
+                      <button 
+                        className="add-to-watchlist-btn"
+                        onClick={handleAddToWatchlist}
+                        title={user ? "Add to watchlist" : "Login to add to watchlist"}
+                      >
+                        {user ? "⭐ Add to Watchlist" : "🔒 Login to Add"}
+                      </button>
+                    </div>
                     <p className="price">${stockInfo.price.toFixed(2)}</p>
                     <p className={`price-change ${stockInfo.priceChange >= 0 ? 'positive' : 'negative'}`}>
                       {stockInfo.priceChange >= 0 ? '+' : ''}{stockInfo.priceChange.toFixed(2)}%
